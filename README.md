@@ -2,7 +2,7 @@
 
 The toolbox contains the implementation of the switched latent force model for reverse-engineering transcriptional regulation in gene expression data proposed in [1]. This approach is inspired by the framework from [2,3], using the mechanistic model from [4].
 
-### Dependences:
+### Dependences (toolboxes):
 1. Switchedlfm toolbox: this toolbox is a modified version from the one available in the GPmat toolbox.
 1. Some dependences from GPmat toolbox (https://github.com/SheffieldML/GPmat): gp, kern, mltools, multigp2, ndlutil, optimi.
 2. Netlab toolbox (https://github.com/sods/netlab).
