@@ -44,8 +44,9 @@ if nargout > 1
         end
     else
         cont = 0;
-        for i=1:kern.nlfPerInt
-            for j=1:kern.nIntervals
+        
+        for j=1:kern.nIntervals
+            for i=1:kern.nlfPerInt    
                 cont = cont + 1;
                 namesInvWidth{cont} = ['inverse width ' num2str(i) '.' ' interval ' num2str(j) '.'];
                 namesSensitivities{cont} = ['sensitivity ' num2str(i) '.' ' interval ' num2str(j) '.'];

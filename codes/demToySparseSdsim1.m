@@ -9,8 +9,10 @@ clear
 randn('state', 1e6)
 rand('twister', 1e6)
 
+% % add toolboxes
 addToolboxes(0,1)
 
+% % defines the model
 dataSetName  = 'toySparseSdsim1';
 experimentNo = 2;
 
@@ -39,21 +41,17 @@ XTemp = XTemp2{1};
 
 Y = cell(1, length(yTemp));
 X = cell(1, length(yTemp));
-scaleVal = zeros(1, length(yTemp));
 
 for i=1:length(yTemp)
     Y{i} = yTemp{i};
     X{i} = XTemp{i};
-%     options.scale(i) = std(Y{i});
 end
 
 % Get the time index.
-
 q = 1;
 d = length(yTemp);
 
 % Creates the model
-
 model = sdlfmgpCreate(q, d, X, Y, options);
 
 % We fix some additional parameters, namely, the value of the first
@@ -78,14 +76,12 @@ for k=1:length(index);
     model.fix(count).index = index(k);
     model.fix(count).value = model.kern.comp{1}.comp{1}.switchingTimes(1);
 end
-
 index = paramNameRegularExpressionLookup(model2, '.* switching point interval 2');
 for k=1:length(index);
     count = count + 1;
     model.fix(count).index = index(k);
     model.fix(count).value = log(model.kern.comp{1}.comp{1}.switchingTimes(2));
 end
-
 decayVal = log([0.7 1.5 0.2]);
 index = paramNameRegularExpressionLookup(model2, '.* decay');
 for k=1:length(index);
@@ -93,7 +89,6 @@ for k=1:length(index);
     model.fix(count).index = index(k);
     model.fix(count).value = decayVal(k);
 end
-
 indexInverseWVal = [1e-1 1 1e-2 1, 1e-1 1 1e-2 1, 1e-1 1 1e-2 1];
 index = paramNameRegularExpressionLookup(model2, '.* inverse width');
 for k=1:length(index);
@@ -102,46 +97,40 @@ for k=1:length(index);
     model.fix(count).value = indexInverseWVal(k);
 end
 
-% Change values of initial parameters
-[params,names]        = modelExtractParam(model);
-valkInit              = model.kern.comp{1}.LIC(:)';
-indexvalkInit         = paramNameRegularExpressionLookup(model, '.* kInit.*');
-params(indexvalkInit) = valkInit;
-indexSP1              = paramNameRegularExpressionLookup(model, '.* switching point interval 1');
-params(indexSP1)      = model.kern.comp{1}.comp{1}.switchingTimes(1);
-indexSP2              = paramNameRegularExpressionLookup(model, '.* switching point interval 2');
-params(indexSP2)      = log(model.kern.comp{1}.comp{1}.switchingTimes(2));
-indexDecay            = paramNameRegularExpressionLookup(model, '.* decay');
-% params(indexDecay)    = log([0.7 1.5 0.2]);
-indexInverseW         = paramNameRegularExpressionLookup(model, '.* inverse width');
-% params(indexInverseW) = log([1e-1 1; 1e-2 1]);
-indexSensitivity      = paramNameRegularExpressionLookup(model, '.* sensitivity .*');
-params(indexSensitivity) = ([1 1 1 1, 1 1 1 1, 1 1 1 0.1]);
-indexPriorSvariance   = paramNameRegularExpressionLookup(model, '.* priorSvariance .*');
-params(indexPriorSvariance) = log(0.3);
-indexVariance         = paramNameRegularExpressionLookup(model, '.* variance');
-params(indexVariance) = log([0.0146  0.0058 0.0946]);
-params(indexVariance) = log(1e-3);
-
-model = modelExpandParam(model, params);
-
-% Train the model
-model = modelOptimise(model, [], [], display, iters);
-[param] = modelExtractParam(model);
-
-% Save the results.
 capName = dataSetName;
 capName(1) = upper(capName(1));
-save(['dem' capName num2str(experimentNo) '.mat'], 'model');
+try
+    % % load model if the experiment was previously saved 
+    load(['dem' capName num2str(experimentNo) '.mat']);
+catch
+    % Change values of initial parameters
+    [params,names]        = modelExtractParam(model);
+    indexSensitivity      = paramNameRegularExpressionLookup(model, '.* sensitivity .*');
+    params(indexSensitivity) = ([1 1 1 1, 1 1 1 1, 1 1 1 0.1]);
+    indexPriorSvariance   = paramNameRegularExpressionLookup(model, '.* priorSvariance .*');
+    params(indexPriorSvariance) = log(0.3);
+    indexVariance         = paramNameRegularExpressionLookup(model, '.* variance');
+    params(indexVariance) = log(1e-3);
+    model = modelExpandParam(model, params);
 
+    % Train the model
+    model = modelOptimise(model, [], [], display, iters);
+
+    % Save the results.
+    save(['dem' capName num2str(experimentNo) '.mat'], 'model');
+end
+
+% % results
 [~, ~, XGT, fGT] = mapLoadData(dataSetName);
-sparseSdsimgpToyResults(dataSetName, experimentNo, XTemp, yTemp, ...
-    XGT{1}, fGT{1})
+sparseSdsimgpToyResults(dataSetName, experimentNo, XTemp, yTemp, XGT{1}, fGT{1})
+[param,names] = modelExtractParam(model);
 
-for k =1:d+2
+indexSP = paramNameRegularExpressionLookup(model, '.* switching point .*');
+for k =1:d+1
     figure(k); hold on; 
-    estimatedSwitchingTimes  = exp(param(options.nlfPerInt*options.nIntervals+3:options.nlfPerInt*options.nIntervals+1+options.nIntervals));
-    lines = cumsum([param(options.nlfPerInt*options.nIntervals+2) estimatedSwitchingTimes]);
+    estimatedSwitchingTimes  = exp(param(indexSP(2:end)));
+    estimatedSwitchingTimes  = [switchingTimes(1) estimatedSwitchingTimes];
+    lines = cumsum(estimatedSwitchingTimes);
     for j = 1:options.nIntervals-1
         plot(lines(j+1)*[1 1],[-50 50],'k--','linewidth',1)
     end

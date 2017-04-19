@@ -71,7 +71,8 @@ kern.outputIndx = [1]; % Index of the decay
 kern.inverseWidthIndx = dimParam(1)+1:sum(dimParam(1:2));
 kern.switchingTimesIndx = sum(dimParam(1:2))+1:sum(dimParam(1:3));
 kern.sensitivityIndx = sum(dimParam(1:3))+1:sum(dimParam(1:4));
-kern.transforms.index = [1:sum(dimParam(1:2)) (sum(dimParam(1:2))+2):sum(dimParam(1:3))] ;
+kern.transforms.index = [1:sum(dimParam(1:2)) (sum(dimParam(1:2))+2):sum(dimParam(1:3))];
+
 if isfield(kern.options, 'priorS') && kern.options.priorS
     kern.priorSvarianceIndx = sum(dimParam(1:4))+1:sum(dimParam);
     kern.transforms.index = [kern.transforms.index sum(dimParam(1:4))+1:sum(dimParam)];
