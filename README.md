@@ -9,10 +9,10 @@ The toolbox contains the implementation of the switched latent force model for r
 
 ### References:
 
-[1] López-Lopera, A. F., and M. A. Álvarez. 2015. “Switched Dynamical Latent Force Models for Modelling Transcriptional Regulation.” ArXiv E-Prints.
+[1] A. F. López-Lopera, and M. A. Álvarez (2017). Switched Dynamical Latent Force Models for Modelling Transcriptional Regulation. Computational Biology and Bioinformatics, IEEE/ACM Transactions on (to appear).
 
-[2] Álvarez, M. A., D. Luengo, and N. D. Lawrence. 2013. “Linear Latent Force Models Using Gaussian Processes.” Pattern Analysis and Machine Intelligence, IEEE Transactions on 35 (11): 2693–2705.
+[2] M. A. Álvarez, D. Luengo, and N. D. Lawrence (2013). Linear Latent Force Models Using Gaussian Processes. Pattern Analysis and Machine Intelligence, IEEE Transactions on, 35(11): 2693–2705.
 
-[3] Álvarez, M. A., J. R. Peter, N. D. Lawrence, and B. Schölkopf. 2010. “Switched Latent Force Models for Movement Segmentation.” In Advances in Neural Information Processing Systems 23, edited by J.D. Lafferty, C.K.I. Williams, J. Shawe-Taylor, R.S. Zemel, and A. Culotta, 55–63. Curran Associates, Inc.
+[3] M. A. Álvarez, J. R. Peters, N. D. Lawrence, and B. Schölkopf (2010). Switched Latent Force Models for Movement Segmentation. In Advances in Neural Information Processing Systems 23, edited by J.D. Lafferty, C.K.I. Williams, J. Shawe-Taylor, R.S. Zemel, and A. Culotta, 55–63. Curran Associates, Inc.
 
-[4] Lawrence, N. D., G. Sanguinetti, and M. Rattray. 2006. “Modelling Transcriptional Regulation Using Gaussian Processes.” In Advances in Neural Information Processing Systems 19, edited by B. Schölkopf, J. C. Platt, and T. Hoffman, 785–92. MIT Press.
+[4] N. D. Lawrence, G. Sanguinetti, and M. Rattray (2006). Modelling Transcriptional Regulation Using Gaussian Processes. In Advances in Neural Information Processing Systems 19, edited by B. Schölkopf, J. C. Platt, and T. Hoffman, 785–92. MIT Press.
